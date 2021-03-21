@@ -9,7 +9,7 @@ import { background, neutral, text } from '../styles/colors/theme';
 //Components
 import AppHeader from '../components/AppHeader';
 import TitleColumn from '../components/TitleColumn';
-import movieCards from '../components/movieCards';
+import MovieCards from '../components/MovieCards';
 
 import {getPopularMovies} from '../utils/dataAccess';
 
@@ -31,14 +31,16 @@ const Overview = ({navigation} : any) => {
 
     const renderPopularMovies = () => {
         const popMovies = [];
-        console.log(popularMovies[1]);
+        console.log(popularMovies[1]?.id);
         for (let i = 0; i < 10; i++){
             popMovies.push(
                 
                 // <Text style={[text.neutral[100]]}>{popularMovies[i]?.original_title}</Text>
-                <movieCards key={popularMovies[i]?.id} picture={popularMovies[i]?.poster_path} />
+                <MovieCards 
+                    key={popularMovies[i]?.id} 
+                    picture={popularMovies[i]?.poster_path} 
+                />
             )
-            
         }
 
         return popMovies;
@@ -54,7 +56,7 @@ const Overview = ({navigation} : any) => {
             <ScrollView>
 
                 <TitleColumn name='Popular Movies'/>
-                <ScrollView horizontal>
+                <ScrollView horizontal style={{paddingLeft:16,marginTop:16}}>
                      {renderPopularMovies()}
                 </ScrollView>
                 <TitleColumn name='Get upcoming'/>
