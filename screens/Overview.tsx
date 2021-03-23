@@ -11,7 +11,7 @@ import AppHeader from '../components/AppHeader';
 import TitleColumn from '../components/TitleColumn';
 import MovieCards from '../components/MovieCards';
 
-import {getPopularMovies, getTopRatedMovies} from '../utils/dataAccess';
+import {getPopularMovies, getTopRatedMovies, getUpcomingMovies} from '../utils/dataAccess';
 
 const Stack = createStackNavigator();
 
@@ -19,31 +19,29 @@ const Overview = ({navigation} : any) => {
 
     const [popularMovies, setPopularMovies] = useState([]);
     const [topRatedMovies, setTopRatedMovies] = useState([]);
+    const [upcomingMovies, setUpcomingMovies] = useState([]);
 
-    const getPopMovies = async () => {
-        const tempData = await getPopularMovies();
-        setPopularMovies(tempData);
-    }
-
-    const getTopMovies = async () => {
-        const tempData = await getTopRatedMovies();
-        setTopRatedMovies(tempData);
+    const getMovies = async () => {
+        const popMovies = await getPopularMovies();
+        setPopularMovies(popMovies);
+        const topMovies = await getTopRatedMovies();
+        setTopRatedMovies(topMovies);
+        const futureMovies = await getUpcomingMovies();
+        setUpcomingMovies(futureMovies);
     } 
 
     useEffect(() => {
-		// setPopularMovies(getPopularMovies());
-        getPopMovies();
-        getTopMovies();
+        getMovies();
 	}, []);
 
-    const renderPopularMovies = () => {
+    const renderMovies = (props : string[]) => {
         const popMovies = [];
 
         for (let i = 0; i < 10; i++){
             popMovies.push(
                 <MovieCards 
-                    idMovie={popularMovies[i]?.id} //id => wanneer geklikt op film dat je weet welke film
-                    picture={popularMovies[i]?.poster_path} // picture => afbeelding weergeven
+                    idMovie={props[i]?.id} //id => wanneer geklikt op film dat je weet welke film
+                    picture={props[i]?.poster_path} // picture => afbeelding weergeven
                 />
             )
         }
@@ -54,20 +52,27 @@ const Overview = ({navigation} : any) => {
 
     return(
         <SafeAreaView>
+            <ScrollView style={{paddingBottom:16}}>
             <View> 
                 <AppHeader/>
             </View>
 
-            <ScrollView>
+            
 
                 <TitleColumn name='Popular Movies'/>
                 <ScrollView horizontal style={{paddingLeft:16,marginTop:16}}>
-                     {renderPopularMovies()}
+                    {renderMovies(popularMovies)}
                 </ScrollView>
+
                 <TitleColumn name='Get upcoming'/>
+                <ScrollView horizontal style={{paddingLeft:16,marginTop:16}}>
+                     {renderMovies(upcomingMovies)}
+                </ScrollView>
 
                 <TitleColumn name='Top Rated Movies'/>
-
+                <ScrollView horizontal style={{paddingLeft:16,marginTop:16}}>
+                     {renderMovies(topRatedMovies)}
+                </ScrollView>
             </ScrollView>
 
         </SafeAreaView>
