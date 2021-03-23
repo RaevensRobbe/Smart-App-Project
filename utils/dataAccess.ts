@@ -13,21 +13,17 @@ export const get = (url: string) => {
 // POPULAR Movies
 export const getPopularMovies = async () => {
 	const data: string[] = await get(`${MOVIE_URL}/popular${KEY}`);
-
-    // console.log(data.results);
-
 	return [...data.results];
-	// return data.results;
 }
 
 // TOP RATED Movies
 export const getTopRatedMovies = async () => {
 	const data: string[] = await get(`${MOVIE_URL}/top_rated${KEY}`);
-
-    // console.log(data.results);
-
 	return [...data.results];
-	// return data.results;
 }
 
 // UPCOMING Movies
+export const getUpcomingMovies = async () => {
+	const data: string[] = await get(`${MOVIE_URL}/upcoming${KEY}`);
+	return [...data.results];
+}
