@@ -1,23 +1,33 @@
 import React from 'react';
 import {SafeAreaView, Text, TouchableOpacity, View, Image} from 'react-native';
 
+//Styles
 import { background, neutral, text } from '../styles/colors/theme';
+import {Cards} from '../styles/components/cards';
 
 type EmojiArgs = {
-	key: string;
+	idMovie: number;
 	picture: string;
 }
 
 const IMAGE_URL = "https://image.tmdb.org/t/p/w500";
 
-const movieCards = ({ key, picture }: EmojiArgs) => {
+const MovieCards = ({ idMovie, picture }: EmojiArgs) => {
+    const pressedMovie = (i) => {
+        console.log("pressed: " + i);
+    }
+    const full_url = IMAGE_URL + picture;
+    // console.log(full_url);
     return(
         <SafeAreaView>
-            <View>
-            <Image source={{uri: IMAGE_URL + picture}} />
-            </View>
+            <TouchableOpacity key={idMovie} onPress={() => pressedMovie(idMovie)}>
+            <Image 
+                source={{uri: full_url}} 
+                style={Cards.card} 
+            />
+            </TouchableOpacity>
         </SafeAreaView>
     )
 }
 
-export default movieCards;
+export default MovieCards;
