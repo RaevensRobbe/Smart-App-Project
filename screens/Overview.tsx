@@ -11,7 +11,7 @@ import AppHeader from '../components/AppHeader';
 import TitleColumn from '../components/TitleColumn';
 import MovieCards from '../components/MovieCards';
 
-import {getPopularMovies} from '../utils/dataAccess';
+import {getPopularMovies, getTopRatedMovies} from '../utils/dataAccess';
 
 const Stack = createStackNavigator();
 
@@ -24,28 +24,32 @@ const Overview = ({navigation} : any) => {
         setPopularMovies(tempData);
     } 
 
+    const getTopMovies = async () => {
+        const tempData = await getTopRatedMovies();
+        console.log(tempData);
+    } 
+
     useEffect(() => {
 		// setPopularMovies(getPopularMovies());
         getPopMovies();
+        getTopMovies();
 	}, []);
 
     const renderPopularMovies = () => {
         const popMovies = [];
-        console.log(popularMovies[1]?.id);
+
         for (let i = 0; i < 10; i++){
             popMovies.push(
-                
-                // <Text style={[text.neutral[100]]}>{popularMovies[i]?.original_title}</Text>
                 <MovieCards 
-                    key={popularMovies[i]?.id} 
-                    picture={popularMovies[i]?.poster_path} 
+                    idMovie={popularMovies[i]?.id} //id => wanneer geklikt op film dat je weet welke film
+                    picture={popularMovies[i]?.poster_path} // picture => afbeelding weergeven
                 />
             )
         }
-
         return popMovies;
-
     }
+
+    const renderTopMovies = () => {}
 
     return(
         <SafeAreaView>

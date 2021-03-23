@@ -21,5 +21,13 @@ export const getPopularMovies = async () => {
 }
 
 // TOP RATED Movies
+export const getTopRatedMovies = async () => {
+	const data: string[] = await get(`${MOVIE_URL}/top_rated${KEY}`);
+
+    // console.log(data.results);
+
+	return [...data.results];
+	// return data.results;
+}
 
 // UPCOMING Movies

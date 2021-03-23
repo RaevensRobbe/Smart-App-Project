@@ -6,19 +6,21 @@ import { background, neutral, text } from '../styles/colors/theme';
 import {Cards} from '../styles/components/cards';
 
 type EmojiArgs = {
-	key: any;
+	idMovie: number;
 	picture: string;
 }
 
 const IMAGE_URL = "https://image.tmdb.org/t/p/w500";
 
-const MovieCards = ({ key, picture }: EmojiArgs) => {
-    console.log(key + " " + picture);
+const MovieCards = ({ idMovie, picture }: EmojiArgs) => {
+    const pressedMovie = (i) => {
+        console.log("pressed: " + i);
+    }
     const full_url = IMAGE_URL + picture;
-    console.log(full_url);
+    // console.log(full_url);
     return(
         <SafeAreaView>
-            <TouchableOpacity>
+            <TouchableOpacity key={idMovie} onPress={() => pressedMovie(idMovie)}>
             <Image 
                 source={{uri: full_url}} 
                 style={Cards.card} 
