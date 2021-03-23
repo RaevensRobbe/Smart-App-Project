@@ -18,15 +18,16 @@ const Stack = createStackNavigator();
 const Overview = ({navigation} : any) => {
 
     const [popularMovies, setPopularMovies] = useState([]);
+    const [topRatedMovies, setTopRatedMovies] = useState([]);
 
     const getPopMovies = async () => {
         const tempData = await getPopularMovies();
         setPopularMovies(tempData);
-    } 
+    }
 
     const getTopMovies = async () => {
         const tempData = await getTopRatedMovies();
-        console.log(tempData);
+        setTopRatedMovies(tempData);
     } 
 
     useEffect(() => {
