@@ -11,11 +11,12 @@ import {useFonts} from 'expo-font';
 
 // screens
 import Favorites from './screens/Favorites';
-import Overview from './screens/Overview';
+import Overview from './screens/Overview/Overview';
 import Search from './screens/Search';
 
 //Styles
 import { neutral, background } from './styles/colors/theme'
+import OverviewIndex from './screens/Overview';
 
 const Tab = createBottomTabNavigator();
 
@@ -63,7 +64,7 @@ if(loaded){
               [ background.neutral[700] ]
           }
         >
-          <Tab.Screen name="overview" component={Overview} />
+          <Tab.Screen name="overview" component={OverviewIndex} />
           <Tab.Screen name="search" component={Search} />
           <Tab.Screen name="favorites" component={Favorites} />
         </Tab.Navigator>
