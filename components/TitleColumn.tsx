@@ -5,20 +5,18 @@ import { background, neutral, text } from '../styles/colors/theme';
 
 import { Intertitles } from '../styles/components/Intertitles';
 
-import CustomButton from './CustomButton';
+import {CustomButtonSeeMore} from './CustomButton';
 
-const TitleColumn = (props : any) => {
+export const TitleColumn = (props : any) => {
     return(
         <SafeAreaView>
             <View style={Intertitles.Container}>
                 <View style={[Intertitles.Rectangle, background.neutral[500]]} />
                 <Text style={[Intertitles.Title, text.neutral[100]]} >{props.name}</Text>
                 <View style={[Intertitles.button]}>
-                    <CustomButton />
+                    <CustomButtonSeeMore buttonId={props.buttonId} navigation={props.navigation} name={props.name} />
                 </View>
             </View>
         </SafeAreaView>
     )
 }
-
-export default TitleColumn;

@@ -15,4 +15,18 @@ export const button = StyleSheet.create({
         height: 27,
         fontFamily: 'Montserrat',
     },
+    buttonSvg:{
+        flexDirection: "row",
+        width: 40,
+        height: 40,
+        borderRadius: 50
+    },
+    svg:{
+        transform: [{ rotate: '180deg'}],
+    },
+    tekst:{
+        fontFamily: 'Montserrat',
+        paddingLeft: 16,
+        fontSize: 20,  
+    }
 });
