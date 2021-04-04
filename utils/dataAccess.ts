@@ -16,14 +16,32 @@ export const getPopularMovies = async () => {
 	return [...data.results];
 }
 
+export const getMorePopularMovies = async () => {
+	const data: string[] = await get(`${MOVIE_URL}/popular${KEY}&page=2`);
+
+
+	return [...data.results];
+}
+
+
 // TOP RATED Movies
 export const getTopRatedMovies = async () => {
 	const data: string[] = await get(`${MOVIE_URL}/top_rated${KEY}`);
 	return [...data.results];
 }
 
+export const getMoreTopRatedMovies = async () => {
+	const data: string[] = await get(`${MOVIE_URL}/top_rated${KEY}&page=2`);
+	return [...data.results];
+}
+
 // UPCOMING Movies
 export const getUpcomingMovies = async () => {
 	const data: string[] = await get(`${MOVIE_URL}/upcoming${KEY}`);
+	return [...data.results];
+}
+
+export const getMoreUpcomingMovies = async () => {
+	const data: string[] = await get(`${MOVIE_URL}/upcoming${KEY}&page=2`);
 	return [...data.results];
 }

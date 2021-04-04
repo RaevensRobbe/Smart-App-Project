@@ -1,14 +1,12 @@
+//@ts-nocheck
 import React from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation, NavigationContainer } from '@react-navigation/native';
-// @ts-ignore 
+import { useNavigation } from '@react-navigation/native';
 import Svg, { Path } from 'react-native-svg';
 
 
-import { background, neutral, text } from '../styles/colors/theme';
+import { background, text } from '../styles/colors/theme';
 import { button } from '../styles/components/button';
-import MoreMovies from '../screens/Overview/MoreMovies';
 
 export const CustomButtonSeeMore = (props : any) => {
     const navigation = useNavigation();
@@ -27,7 +25,7 @@ export const CustomButtonSeeMore = (props : any) => {
 export const CustomButtonSvg = (props: any) => {
     const navigation = useNavigation();
     const interTitleName = props.tekst;
-    console.log("Button: " + interTitleName);
+
     return (
         <TouchableOpacity onPress={() => navigation.goBack()}>
             <View style={{flex: 1, flexDirection: "row", alignItems: "center"}}>

@@ -1,6 +1,7 @@
+//@ts-nocheck
 import { createStackNavigator } from '@react-navigation/stack';
 import React, { useEffect, useState } from 'react';
-import {Text, View, TouchableOpacity, ScrollView, SafeAreaView} from 'react-native';
+import {View, ScrollView, SafeAreaView} from 'react-native';
 import { BlurView } from 'expo-blur';
 
 //Components
@@ -9,10 +10,9 @@ import {TitleColumn} from '../../components/TitleColumn';
 import {MovieCards} from '../../components/MovieCards';
 
 //Styles
-import { neutral, background } from './../../styles/colors/theme';
+import { background } from './../../styles/colors/theme';
 
 import {getPopularMovies, getTopRatedMovies, getUpcomingMovies} from '../../utils/dataAccess';
-import MoreMovies from './MoreMovies';
 
 const Stack = createStackNavigator();
 
@@ -50,29 +50,30 @@ const Overview = ({navigation} : any) => {
     }
 
     return(
-        <SafeAreaView style={[background.neutral[700]]}>       
-                <ScrollView style={{paddingBottom:16}}>
-                
-                    <View> 
-                        <AppHeader/>
-                    </View>
+        
+        <SafeAreaView style={[background.neutral[700]]}>  
 
-                    <TitleColumn name='Popular Movies' buttonId="popular" navigation="MoreMovies" api="popular" />
-                    <ScrollView horizontal style={{paddingLeft:16,marginTop:16}}>
-                        {renderMovies(popularMovies)}
-                    </ScrollView>
-                    
-                    <TitleColumn name='Upcoming Movies' buttonId="upcoming" navigation="MoreMovies" api="upcoming"/>
-                    <ScrollView horizontal style={{paddingLeft:16,marginTop:16}}>
-                        {renderMovies(upcomingMovies)}
-                    </ScrollView>
-                    
-                    <TitleColumn name='Top Rated Movies' buttonId="top_rated" navigation="MoreMovies" api="top_rated"/>
-                    <ScrollView horizontal style={{paddingLeft:16,marginTop:16}}>
-                        {renderMovies(topRatedMovies)}
-                    </ScrollView>
-                    
+            <ScrollView stickyHeaderIndices={[0]}>
+                <View style={[background.neutral[700]]}>
+                    <AppHeader/>
+                </View>
+                
+                <TitleColumn name='Popular Movies' buttonId="popular" navigation="MoreMovies" api="popular" />
+                <ScrollView horizontal style={{paddingLeft:16,marginTop:16}}>
+                    {renderMovies(popularMovies)}
                 </ScrollView>
+                
+                <TitleColumn name='Upcoming Movies' buttonId="upcoming" navigation="MoreMovies" api="upcoming"/>
+                <ScrollView horizontal style={{paddingLeft:16,marginTop:16}}>
+                    {renderMovies(upcomingMovies)}
+                </ScrollView>
+                
+                <TitleColumn name='Top Rated Movies' buttonId="top_rated" navigation="MoreMovies" api="top_rated"/>
+                <ScrollView horizontal style={{paddingLeft:16,marginTop:16}}>
+                    {renderMovies(topRatedMovies)}
+                </ScrollView>
+                <View style={{padding:8}}/>                
+            </ScrollView>
 
         </SafeAreaView>
 
