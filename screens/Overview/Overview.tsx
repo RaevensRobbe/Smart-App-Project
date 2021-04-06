@@ -7,7 +7,8 @@ import { BlurView } from 'expo-blur';
 //Components
 import AppHeader from '../../components/AppHeader';
 import {TitleColumn} from '../../components/TitleColumn';
-import {MovieCards} from '../../components/MovieCards';
+import {MovieCards} from '../../components/movieCards';
+import PopUpMovieModule from '../../components/PopUpMovieModule';
 
 //Styles
 import { background } from './../../styles/colors/theme';
@@ -37,7 +38,6 @@ const Overview = ({navigation} : any) => {
 
     const renderMovies = (props : string[]) => {
         const popMovies = [];
-
         for (let i = 0; i < 10; i++){
             popMovies.push(
                 <MovieCards 
@@ -51,7 +51,7 @@ const Overview = ({navigation} : any) => {
 
     return(
         
-        <SafeAreaView style={[background.neutral[700]]}>  
+        <SafeAreaView  style={[background.neutral[700]]}>  
 
             <ScrollView stickyHeaderIndices={[0]}>
                 <View style={[background.neutral[700]]}>
