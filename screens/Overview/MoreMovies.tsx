@@ -4,14 +4,12 @@ import {Text, View, TouchableOpacity, ScrollView, Button} from 'react-native';
 
 import {SafeAreaView} from 'react-native-safe-area-context'
 
-import { BlurView } from 'expo-blur';
-
 import { useNavigation } from '@react-navigation/native';
 
 import Svg, { Path } from 'react-native-svg';
 
 //Components
-import {MovieCards} from '../../components/MovieCards';
+import {MovieCards} from '../../components/movieCards';
 
 //Styles
 import { background, text } from './../../styles/colors/theme';
