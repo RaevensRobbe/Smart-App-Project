@@ -13,9 +13,11 @@ export const TitleColumn = (props : any) => {
             <View style={Intertitles.Container}>
                 <View style={[Intertitles.Rectangle, background.neutral[500]]} />
                 <Text style={[Intertitles.Title, text.neutral[100]]} >{props.name}</Text>
+                {props.navigation && 
                 <View style={[Intertitles.button]}>
                     <CustomButtonSeeMore buttonId={props.buttonId} navigation={props.navigation} name={props.name} />
                 </View>
+            }
             </View>
         </SafeAreaView>
     )

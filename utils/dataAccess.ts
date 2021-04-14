@@ -18,8 +18,6 @@ export const getPopularMovies = async () => {
 
 export const getMorePopularMovies = async () => {
 	const data: string[] = await get(`${MOVIE_URL}/popular${KEY}&page=2`);
-
-
 	return [...data.results];
 }
 
@@ -48,6 +46,18 @@ export const getMoreUpcomingMovies = async () => {
 // Get Movie Data
 export const getMovieDetails = async (id) => {
 	const data: string[] = await get(`${MOVIE_URL}/${id}${KEY}`);
+	// console.log(data);
+	return [data];
+}
+
+export const getSimilarMovies = async (id) => {
+	const data: string[] = await get(`${MOVIE_URL}/${id}/similar${KEY}`);
+	// console.log(data);
+	return [...data.results];
+}
+
+export const getActors = async(id) => {
+	const data: string[] = await get(`${MOVIE_URL}/${id}/credits${KEY}`);
 	// console.log(data);
 	return [data];
 }
