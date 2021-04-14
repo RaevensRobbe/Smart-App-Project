@@ -36,13 +36,23 @@ export const MovieCards = ({ idMovie, picture }: MovieArgs) => {
     const [movieGenres, setMovieGenres] = useState<string[]>();
 
     const navigation = useNavigation();
-  
+
+
     const getMovieData = async () => {
+        //console.log(idMovie);
         const data = await getMovieDetails(idMovie);
-        setMovieData(data);
-        if (movieData == undefined) {
-            
-        } else {
+        await setMovieData(data);
+    };
+
+    useEffect(() => {
+        getMovieData();
+        //console.log("useEffect " + idMovie)
+    },[])
+  
+
+    const renderData = async () => {
+        // console.log("render");
+        // console.log(movieData);
         const genres = [];
         setMovieBackrop(IMAGE_URL + movieData[0]?.backdrop_path);
         setMovieName(movieData[0]?.title);
@@ -52,37 +62,22 @@ export const MovieCards = ({ idMovie, picture }: MovieArgs) => {
             genres.push(movieData[0]?.genres[i].name + "    ");
         }
         setMovieGenres(genres);
-        //renderData();
+
         setModalVisible(true);
-        }
     };
-
-    // const renderData = () => {
-    //     console.log("render");
-    //     console.log(movieData);
-    //     const genres = [];
-    //     setMovieBackrop(IMAGE_URL + movieData[0]?.backdrop_path);
-    //     setMovieName(movieData[0]?.title);
-    //     setMovieDescription(movieData[0]?.overview);
-    //     setMovieVote(movieData[0]?.vote_average);
-    //     for (let i = 0; i < movieData[0]?.genres.length; i++) {
-    //         genres.push(movieData[0]?.genres[i].name + "    ");
-    //     }
-    //     setMovieGenres(genres);
-    //     console.log();
-
-    //     setModalVisible(true);
-    // };
 
     const toggleModal = () => {
       setModalVisible(!isModalVisible);
     };
 
-    const full_url = IMAGE_URL + picture;
+    var full_url = IMAGE_URL + picture;
+    if (picture == null) {
+        full_url = "https://safetyaustraliagroup.com.au/wp-content/uploads/2019/05/image-not-found.png";
+    }
 
     return(
         <SafeAreaView>
-            <TouchableOpacity key={idMovie} onPress={() => getMovieData()}>
+            <TouchableOpacity key={idMovie} onPress={() => renderData()}>
             <Image 
                 source={{uri: full_url}} 
                 style={Cards.card} 
@@ -124,7 +119,10 @@ type CastArgs = {
 }
 
 export const CastCards = ({ name, picture }: CastArgs) => {
-    const full_cast_url = IMAGE_URL + picture;
+    var full_cast_url = IMAGE_URL + picture;
+    if (picture == "null") {
+        full_cast_url = "https://safetyaustraliagroup.com.au/wp-content/uploads/2019/05/image-not-found.png";
+    }
     return (
         <SafeAreaView>
             <Image 
