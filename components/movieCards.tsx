@@ -41,7 +41,7 @@ export const MovieCards = ({ idMovie, picture }: MovieArgs) => {
     const getMovieData = async () => {
         //console.log(idMovie);
         const data = await getMovieDetails(idMovie);
-        await setMovieData(data);
+        setMovieData(data);
     };
 
     useEffect(() => {
@@ -51,6 +51,7 @@ export const MovieCards = ({ idMovie, picture }: MovieArgs) => {
   
 
     const renderData = async () => {
+        getMovieData();
         // console.log("render");
         // console.log(movieData);
         const genres = [];

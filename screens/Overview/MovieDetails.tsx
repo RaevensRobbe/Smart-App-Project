@@ -3,11 +3,14 @@ import React, { useEffect, useState } from 'react';
 import {Text, View, ScrollView, Image} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import MovieDetailsComponent from '../../components/MovieDetailsComponent';
+import * as Calendar from 'expo-calendar';
+import * as Notifications from 'expo-notifications';
 
 import Svg, { Path, Rect, Line } from 'react-native-svg';
 
 import {TitleColumn} from '../../components/TitleColumn';
 import {CastCards, MovieCards} from '../../components/movieCards';
+
 
 //Styles
 import { background, text } from './../../styles/colors/theme';
@@ -18,6 +21,13 @@ import { button } from './../../styles/components/button';
 import { getActors, getMovieDetails, getSimilarMovies } from './../../utils/dataAccess';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
+Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldShowAlert: true,
+      shouldPlaySound: false,
+      shouldSetBadge: false,
+    }),
+  });
 
 const MovieDetails = ({navigation, route}) => {
     const { movieId } = route.params;
@@ -88,6 +98,33 @@ const MovieDetails = ({navigation, route}) => {
         return simMovies;
     }
 
+    const addToCalendar = async() => {
+        const { status } = await Calendar.requestCalendarPermissionsAsync();
+        if (status === 'granted') {
+            const calendars = await Calendar.getCalendarsAsync(Calendar.EntityTypes.EVENT);
+            // console.log(calendars);
+            // console.log("add to calendar");
+            //! default os calendar altijd id: 1 => en moet een string zijn
+            const newEvent = await Calendar.createEventAsync("1", 
+                {
+                    title: movieData[0]?.title,
+                    startDate: new Date(movieData[0]?.release_date),
+                    endDate: new Date(movieData[0]?.release_date),
+                    allDay : true,
+                    timeZone: "Europe/Brussels",
+                }
+            );
+            // console.log(newEvent);
+            await Notifications.scheduleNotificationAsync({
+                content: {
+                  title: "Added successfully 🍿",
+                  body: movieData[0]?.title + " has been added to your calendar",
+                },
+                trigger: { seconds: 1 },
+              });
+        }
+    }
+
     const renderMovieInfo = (props : string[]) => {
         const movieInfo = [];
 
@@ -103,7 +140,8 @@ const MovieDetails = ({navigation, route}) => {
             }
             if(genres.length == 0){
                 genres.push("unknown")
-            } console.log(genres);
+            } 
+            // console.log(genres);
 
             for (let i = 0; i < movieData[0]?.production_companies.length; i++) {
                 productionCompanies.push(movieData[0]?.production_companies[i].name);
@@ -119,7 +157,7 @@ const MovieDetails = ({navigation, route}) => {
                 languages.push("unknown")
             }
             var full_url = IMAGE_URL + movieData[0]?.backdrop_path;
-            console.log(full_url);
+            // console.log(full_url);
             movieInfo.push(
                 <View style={[detailPage.container]}>
                     <Image source={{uri: full_url}} style={[detailPage.image]}/>
@@ -150,14 +188,14 @@ const MovieDetails = ({navigation, route}) => {
 
                             <View style={[detailPage.actionGroup]}>
                                 <Text  style={[detailPage.actionGroupTekst, text.neutral[200]]}>Favorite</Text>
-                                <TouchableOpacity>
+                                <TouchableOpacity onPress={() => console.log("clicked add to Favorites")}>
                                     <Svg xmlns="http://www.w3.org/2000/svg" width="29" height="29" viewBox="0 0 24 24" fill="none" stroke="#e0d8d6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><Path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></Path></Svg>
                                 </TouchableOpacity>
                             </View>
 
                             <View style={[detailPage.actionGroup]}>
                                 <Text  style={[detailPage.actionGroupTekst, text.neutral[200]]}>Save date</Text>
-                                <TouchableOpacity>
+                                <TouchableOpacity onPress={() => addToCalendar()}>
                                 <Svg xmlns="http://www.w3.org/2000/svg" width="29" height="29" viewBox="0 0 24 24" fill="none" stroke="#e0d8d6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><Rect x="3" y="4" width="18" height="18" rx="2" ry="2"></Rect><Line x1="16" y1="2" x2="16" y2="6"></Line><Line x1="8" y1="2" x2="8" y2="6"></Line><Line x1="3" y1="10" x2="21" y2="10"></Line></Svg>
                                 </TouchableOpacity>
                             </View>
@@ -206,7 +244,7 @@ const MovieDetails = ({navigation, route}) => {
     }
 
     useEffect(() => {
-        console.log(movieId);
+        // console.log(movieId);
         getMovieData();
 	}, []);
 
