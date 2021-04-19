@@ -38,3 +38,14 @@ export const CustomButtonSvg = (props: any) => {
         </TouchableOpacity>
 )
 }
+
+export const CustomCircleButton = (props:any) =>{
+    const navigation = useNavigation();
+    return(
+        <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginHorizontal:8,}}>
+            <View style={[button.circleButton, background.neutral[500]]}>
+                <Svg style={[button.svg]} xmlns="http://www.w3.org/2000/svg" width="45" height="45" viewBox="0 0 22 23" fill="none" stroke="#e0d8d6" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><Path d="M9 18l6-6-6-6"/></Svg> 
+            </View>
+    </TouchableOpacity>
+    )
+}

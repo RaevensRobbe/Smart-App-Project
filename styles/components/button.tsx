@@ -19,7 +19,8 @@ export const button = StyleSheet.create({
         flexDirection: "row",
         width: 40,
         height: 40,
-        borderRadius: 50
+        borderRadius: 50,
+        flexShrink: 1,
     },
     svg:{
         transform: [{ rotate: '180deg'}],
@@ -28,5 +29,11 @@ export const button = StyleSheet.create({
         fontFamily: 'Montserrat',
         paddingLeft: 16,
         fontSize: 20,  
-    }
+    },
+    circleButton:{
+        marginTop:16,
+        width: 45,
+        height: 45,
+        borderRadius: 50,
+    },
 });

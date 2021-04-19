@@ -18,4 +18,8 @@ export const Cards = StyleSheet.create({
         justifyContent: 'center',
         alignItems:'center',
     },
+    actorName:{
+        maxWidth: (Dimensions.get('window').width - 3 * 16) / 3.3,
+        textAlign: "center",
+    }
 });
