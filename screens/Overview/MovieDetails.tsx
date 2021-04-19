@@ -1,6 +1,6 @@
 //@ts-nocheck
 import React, { useEffect, useState } from 'react';
-import {Text, View, ScrollView, Image} from 'react-native';
+import {Text, View, ScrollView, Image, ImageBackground} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import MovieDetailsComponent from '../../components/MovieDetailsComponent';
 import * as Calendar from 'expo-calendar';
@@ -18,8 +18,13 @@ import { detailPage } from './../../styles/components/detailPage';
 import { tussentitel } from './../../styles/components/moreMovies';
 import { button } from './../../styles/components/button';
 
-import { getActors, getMovieDetails, getSimilarMovies } from './../../utils/dataAccess';
+import { getActors, getMovieDetails, getSimilarMovies, getTrailer } from './../../utils/dataAccess';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { CustomCircleButton } from '../../components/CustomButton';
+import WebView from 'react-native-webview';
+import { moviesdb } from './../../utils/db';
+import { FavoriteMovies } from './../../models/favoriteMovie';
+import { SQLResultSetRowList } from "expo-sqlite";
 
 Notifications.setNotificationHandler({
     handleNotification: async () => ({
@@ -32,11 +37,26 @@ Notifications.setNotificationHandler({
 const MovieDetails = ({navigation, route}) => {
     const { movieId } = route.params;
 
+    var favorite = false;
+
+    const [favoriteMovie, setFavoriteMovie] = useState();
+
     const [movieData, setMovieData] = useState<string[]>();
     const [actors, setActors] = useState<string[]>();
     const [similarMovies, setSimilarMovies] = useState<string[]>();
+    const [trailer, setTrailer] = useState<string[]>();
+    const [favMovies, setFavMovies] = useState<FavoriteMovie[]>([])
 
     const IMAGE_URL = "https://image.tmdb.org/t/p/w500";
+
+    const getFavorites = async () => {
+        const { rows }: {rows: SQLResultSetRowList} = await moviesdb.read();
+        console.log({ rows });
+        setFavMovies((rows as any)._array);
+    }
+
+
+
 
     const getMovieData = async () => {
         const data = await getMovieDetails(movieId);
@@ -45,7 +65,8 @@ const MovieDetails = ({navigation, route}) => {
         setActors(actors);
         const similar = await getSimilarMovies(movieId);
         setSimilarMovies(similar);
-        
+        const trailerData = await getTrailer(movieId);
+        setTrailer(trailerData);
     };
 
     const renderActors = (props : string[]) => {
@@ -98,6 +119,32 @@ const MovieDetails = ({navigation, route}) => {
         return simMovies;
     }
 
+    const showTrailer = (props : string[]) =>{
+        const movieTrailer = [];
+        var teller = 0;
+        if (props != undefined) {
+            for (let i = 0; i < props.length; i++){
+                if(props[i]?.site == "YouTube" && props[i]?.type == "Trailer" && teller==0){
+                    movieTrailer.push(
+                        <View style={{marginBottom:16}}>
+                            <Text style={[detailPage.trailerTekst, text.neutral[100]]}>{props[i]?.name}</Text>
+                            <WebView
+                                style={[detailPage.trailer]}
+                                javaScriptEnabled={true}
+                                domStorageEnabled={true}
+                                source={{uri: 'https://www.youtube.com/embed/'+ props[i]?.key}}
+                            /> 
+                        </View>
+                    )
+                    teller+=1;
+                }
+
+            }
+        }
+        return movieTrailer;
+
+    }
+
     const addToCalendar = async() => {
         const { status } = await Calendar.requestCalendarPermissionsAsync();
         if (status === 'granted') {
@@ -125,7 +172,55 @@ const MovieDetails = ({navigation, route}) => {
         }
     }
 
+    const addToFavorites = async() =>{
+        const movie : FavoriteMovie = {
+            idMovie : movieId,
+            picture : movieData[0]?.backdrop_path
+        }
+
+        console.log(movie);
+        const insert = await moviesdb.create(movie);
+        console.log({insert});
+        if (insert.rowsAffected > 0) {
+            await Notifications.scheduleNotificationAsync({
+                content: {
+                  title: "Added to favorites ♥",
+                  body: movieData[0]?.title + " has been added to your favorites",
+                },
+                trigger: { seconds: 1 },
+            });
+            setFavoriteMovie(1);
+        }
+    }
+
+    const removeFromFavorites = async() =>{
+        const movie : FavoriteMovie = {
+            idMovie : movieId,
+            picture : movieData[0]?.backdrop_path
+        }
+        const deletefav = await moviesdb.delete(movieId);
+        if (deletefav.rowsAffected > 0) {
+            await Notifications.scheduleNotificationAsync({
+                content: {
+                  title: "Removed from favorites 💔",
+                  body: movieData[0]?.title + " has been removed from your favorites",
+                },
+                trigger: { seconds: 1 },
+            });
+            setFavoriteMovie(0);
+        }
+    }
+
     const renderMovieInfo = (props : string[]) => {
+
+        // controle loop om te controleren of dat de film in favorieten zit of niet => add fav veranderen naar delete from favorites
+        for (let i = 0; i < favMovies.length; i++){
+            console.log(favMovies[i].idMovie + " =? " + movieId);
+            if (favMovies[i].idMovie == movieId) {
+                favorite = true;
+            }
+        }
+
         const movieInfo = [];
 
         if (props != undefined) {
@@ -160,7 +255,9 @@ const MovieDetails = ({navigation, route}) => {
             // console.log(full_url);
             movieInfo.push(
                 <View style={[detailPage.container]}>
-                    <Image source={{uri: full_url}} style={[detailPage.image]}/>
+                    <ImageBackground source={{uri: full_url}} style={[detailPage.image]}> 
+                        <CustomCircleButton />
+                    </ImageBackground>
                     <View style={[detailPage.ReleaseYear, background.neutral[500]]}>
                         <Text style={[detailPage.ReleaseYearText, text.neutral[100]]}>{year}</Text>
                     </View>
@@ -187,9 +284,9 @@ const MovieDetails = ({navigation, route}) => {
                             </View>
 
                             <View style={[detailPage.actionGroup]}>
-                                <Text  style={[detailPage.actionGroupTekst, text.neutral[200]]}>Favorite</Text>
-                                <TouchableOpacity onPress={() => console.log("clicked add to Favorites")}>
-                                    <Svg xmlns="http://www.w3.org/2000/svg" width="29" height="29" viewBox="0 0 24 24" fill="none" stroke="#e0d8d6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><Path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></Path></Svg>
+                                <Text  style={[detailPage.actionGroupTekst, text.neutral[200]]}>{favorite ? `Remove favorite` : `Favorite`}</Text>
+                                <TouchableOpacity onPress={() => favorite ? removeFromFavorites() : addToFavorites() }>
+                                    <Svg xmlns="http://www.w3.org/2000/svg" width="29" height="29" viewBox="0 0 24 24" fill={favorite ? `#DF1233` : `none`} stroke={favorite ? `#DF1233` : `#E0D8D6`} stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><Path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></Path></Svg>
                                 </TouchableOpacity>
                             </View>
 
@@ -201,11 +298,15 @@ const MovieDetails = ({navigation, route}) => {
                             </View>
                         </View>
                     </View>
+                    {/* Description part hierin komt tagline + beschrijving */}
                     <View style={[detailPage.descriptionContainer]}>
                         <Text style={[detailPage.tagLine, text.neutral[100]]}>{movieData[0]?.tagline}</Text>
                         <Text style={[detailPage.description, text.neutral[100]]}>{movieData[0]?.overview}</Text>
                     </View>
-                    
+    
+                    {showTrailer(trailer)}
+
+                    {/* info container hierin komt de production companys, de premiere en de talen */}
                     <View style={[background.neutral[800]]}>
                         <View style={[detailPage.infoContainer]}>
 
@@ -244,9 +345,10 @@ const MovieDetails = ({navigation, route}) => {
     }
 
     useEffect(() => {
-        // console.log(movieId);
+        console.log(movieId);
         getMovieData();
-	}, []);
+        getFavorites();
+	}, [favoriteMovie]);
 
     return(
         <SafeAreaView style={[background.neutral[700], tussentitel.container]}>

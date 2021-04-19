@@ -36,7 +36,7 @@ export const PopUp = StyleSheet.create({
         fontSize:12,
         fontFamily: 'Montserrat',
         marginTop:10,
-        marginHorizontal: 16
+        marginHorizontal: 16,
     },
     touchable:{
         alignSelf: "flex-end",

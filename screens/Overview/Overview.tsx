@@ -41,6 +41,7 @@ const Overview = ({navigation} : any) => {
         for (let i = 0; i < 10; i++){
             popMovies.push(
                 <MovieCards 
+                    key={props[i]?.id}
                     idMovie={props[i]?.id} //id => wanneer geklikt op film dat je weet welke film
                     picture={props[i]?.poster_path} // picture => afbeelding weergeven
                 />

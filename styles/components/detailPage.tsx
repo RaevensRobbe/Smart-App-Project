@@ -118,7 +118,7 @@ export const detailPage = StyleSheet.create({
     },
     infoItemsContainer:{
         flex:1,
-        flexDirection: 'row',
+        flexDirection: 'column',
         flexWrap:'wrap',
         marginLeft: 16,
     },
@@ -131,5 +131,22 @@ export const detailPage = StyleSheet.create({
     productionCompany:{
         fontSize:12,
         fontFamily: 'Montserrat',
+    },
+    buttonSvg:{
+        marginTop:16,
+        width: 45,
+        height: 45,
+        borderRadius: 50,
+    },
+    trailerTekst:{
+        fontFamily: 'MontserratBold',
+        marginBottom:8,
+        marginHorizontal: 16,
+        fontSize: 14,
+    },
+    trailer:{
+        flex: 1,
+        height: (Dimensions.get('screen').width - 3 * 16) /1.5,
+        width: (Dimensions.get('window').width) , 
     },
 });
