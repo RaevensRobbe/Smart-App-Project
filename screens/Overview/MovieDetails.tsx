@@ -175,7 +175,7 @@ const MovieDetails = ({navigation, route}) => {
     const addToFavorites = async() =>{
         const movie : FavoriteMovie = {
             idMovie : movieId,
-            picture : movieData[0]?.backdrop_path
+            picture : movieData[0]?.poster_path
         }
 
         console.log(movie);
@@ -215,7 +215,7 @@ const MovieDetails = ({navigation, route}) => {
 
         // controle loop om te controleren of dat de film in favorieten zit of niet => add fav veranderen naar delete from favorites
         for (let i = 0; i < favMovies.length; i++){
-            console.log(favMovies[i].idMovie + " =? " + movieId);
+            // console.log(favMovies[i].idMovie + " =? " + movieId);
             if (favMovies[i].idMovie == movieId) {
                 favorite = true;
             }
@@ -256,7 +256,9 @@ const MovieDetails = ({navigation, route}) => {
             movieInfo.push(
                 <View style={[detailPage.container]}>
                     <ImageBackground source={{uri: full_url}} style={[detailPage.image]}> 
+                    <View style={{marginLeft:8}}>
                         <CustomCircleButton />
+                    </View>
                     </ImageBackground>
                     <View style={[detailPage.ReleaseYear, background.neutral[500]]}>
                         <Text style={[detailPage.ReleaseYearText, text.neutral[100]]}>{year}</Text>
@@ -348,7 +350,7 @@ const MovieDetails = ({navigation, route}) => {
         console.log(movieId);
         getMovieData();
         getFavorites();
-	}, [favoriteMovie]);
+	}, [favoriteMovie, movieId]);
 
     return(
         <SafeAreaView style={[background.neutral[700], tussentitel.container]}>

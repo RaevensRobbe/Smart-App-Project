@@ -75,17 +75,17 @@ export const detailPage = StyleSheet.create({
     ReleaseYear:{
         flex: 1,
         flexDirection: "row",
-        height:40,
+        height:30,
         width: 80,
         borderRadius: 50,
         alignItems: "center",
         marginLeft: 16,
-        marginTop: -20,
+        marginTop: -15,
     },
     ReleaseYearText:{
         textAlign: "center",
         fontFamily: 'Montserrat',
-        fontSize:16,
+        fontSize:14,
         width: 80,
     },
 

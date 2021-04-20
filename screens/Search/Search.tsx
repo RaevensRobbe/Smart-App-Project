@@ -48,7 +48,13 @@ const Search = ({navigation} : any) => {
             //Als er data is ####################################################
             <View style={[search.container]}> 
                 <View style={[search.containerTopIfData]}>
-                    <CustomCircleButton />
+                    <TouchableOpacity onPress={() => navigation.goBack()} style={{paddingBottom:16, marginVertical: 16, marginHorizontal:8, marginTop:20}}>
+                        <View style={{flex: 1, flexDirection: "row", alignItems: "center", marginBottom:16}}>
+                            <View style={[button.buttonSvg, background.neutral[500]]}>
+                                <Svg style={[button.svg]} xmlns="http://www.w3.org/2000/svg" width="45" height="45" viewBox="0 0 20 22" fill="none" stroke="#e0d8d6" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><Path d="M9 18l6-6-6-6"/></Svg> 
+                            </View>
+                        </View>
+                    </TouchableOpacity>
                     <View style={[search.inputContainer]}>
                         <View style={[search.inputSvg]}>
                         <Svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#716D76" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><Circle cx="11" cy="11" r="8"></Circle><Line x1="21" y1="21" x2="16.65" y2="16.65"></Line></Svg>
@@ -66,6 +72,7 @@ const Search = ({navigation} : any) => {
                     </View>
                 </View>
                 <TitleColumn name='Results' />
+                <View style={{marginBottom:8}}/>
                 <ScrollView contentContainerStyle={[Cards.holder]}>
                     { renderMovies(searchedMovie)}
                 </ScrollView>

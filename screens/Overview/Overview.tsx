@@ -38,7 +38,9 @@ const Overview = ({navigation} : any) => {
 
     const renderMovies = (props : string[]) => {
         const popMovies = [];
+        if (!props) return;
         for (let i = 0; i < 10; i++){
+            //console.log(props[i]);
             popMovies.push(
                 <MovieCards 
                     key={props[i]?.id}
@@ -47,6 +49,7 @@ const Overview = ({navigation} : any) => {
                 />
             )
         }
+
         return popMovies;
     }
 
@@ -61,17 +64,17 @@ const Overview = ({navigation} : any) => {
                 
                 <TitleColumn name='Popular Movies' buttonId="popular" navigation="MoreMovies" api="popular" />
                 <ScrollView horizontal style={{paddingLeft:16,marginTop:16}}>
-                    {renderMovies(popularMovies)}
+                    {popularMovies && renderMovies(popularMovies)}
                 </ScrollView>
                 
                 <TitleColumn name='Upcoming Movies' buttonId="upcoming" navigation="MoreMovies" api="upcoming"/>
                 <ScrollView horizontal style={{paddingLeft:16,marginTop:16}}>
-                    {renderMovies(upcomingMovies)}
+                    {upcomingMovies && renderMovies(upcomingMovies)}
                 </ScrollView>
                 
                 <TitleColumn name='Top Rated Movies' buttonId="top_rated" navigation="MoreMovies" api="top_rated"/>
                 <ScrollView horizontal style={{paddingLeft:16,marginTop:16}}>
-                    {renderMovies(topRatedMovies)}
+                    {topRatedMovies && renderMovies(topRatedMovies)}
                 </ScrollView>
                 <View style={{padding:8}}/>                
             </ScrollView>
