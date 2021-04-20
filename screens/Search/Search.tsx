@@ -22,11 +22,12 @@ const Search = ({navigation} : any) => {
     const getMovies = async () => {
         const movieData = await getSearchMovies(movieInput);
         setSearchedMovie(movieData);
+        
     } 
 
     const renderMovies = (props : string[]) => {
         const foundMovies = [];
-        console.log(props);
+        //console.log(props);
         
         for (let i = 0; i < props.length; i++){
             foundMovies.push(
@@ -39,6 +40,10 @@ const Search = ({navigation} : any) => {
 
         return foundMovies;
     }
+
+    useEffect(() => {
+        
+    },[searchedMovie])
 
     return(
         //SafeAreaView moet hier staan en niet in conditionele rendering anders werkt de rendering niet

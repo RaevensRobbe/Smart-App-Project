@@ -100,7 +100,7 @@ export const MovieCards = ({ idMovie, picture }: MovieArgs) => {
                                 </ScrollView>
 
 
-                                <TouchableOpacity style={[PopUp.touchable]} onPress={() => {setModalVisible(!isModalVisible), console.log(idMovie), navigation.navigate("MovieDetails", {movieId:idMovie})}}>
+                                <TouchableOpacity style={[PopUp.touchable]} onPress={() => {setModalVisible(!isModalVisible), navigation.navigate("MovieDetails", {movieId:idMovie})}}>
                                     <View  style={[ PopUp.button_container, background.neutral[500]]}>
                                         <Text style={[ button.buttonText, text.neutral[100]]}>See more</Text>
                                         <Svg xmlns="http://www.w3.org/2000/svg" width="50" height="29" viewBox="0 0 24 24" fill="none" stroke="#e0d8d6" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><Path d="M9 18l6-6-6-6"/></Svg>  
