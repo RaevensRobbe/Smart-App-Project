@@ -47,10 +47,14 @@ const Search = ({navigation} : any) => {
         console.log("useEffect");
     },[searchedMovie])
 
-    const returnButton = () =>{
+    const returnButton = (routename?: string) =>{
         setSearchedMovie([]);
         setMovieInput('');
-        navigation.goBack();
+        if (routename) {
+            navigation.navigate(routename);
+        } else {
+            navigation.goBack();
+        }
     }
 
     return(
