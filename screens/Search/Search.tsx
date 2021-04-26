@@ -21,6 +21,7 @@ const Search = ({navigation} : any) => {
 
     const getMovies = async () => {
         const movieData = await getSearchMovies(movieInput);
+        setSearchedMovie([]);
         setSearchedMovie(movieData);
         
     } 
@@ -28,22 +29,29 @@ const Search = ({navigation} : any) => {
     const renderMovies = (props : string[]) => {
         const foundMovies = [];
         //console.log(props);
-        
-        for (let i = 0; i < props.length; i++){
-            foundMovies.push(
-                <MovieCards 
-                    idMovie={props[i]?.id} //id => wanneer geklikt op film dat je weet welke film
-                    picture={props[i]?.poster_path} // picture => afbeelding weergeven
-                />
-            )
+        if(searchedMovie){
+            for (let i = 0; i < props.length; i++){
+                foundMovies.push(
+                    <MovieCards 
+                        idMovie={props[i]?.id} //id => wanneer geklikt op film dat je weet welke film
+                        picture={props[i]?.poster_path} // picture => afbeelding weergeven
+                    />
+                )
+            }
         }
 
         return foundMovies;
     }
 
     useEffect(() => {
-        
+        console.log("useEffect");
     },[searchedMovie])
+
+    const returnButton = () =>{
+        setSearchedMovie([]);
+        setMovieInput('');
+        navigation.goBack();
+    }
 
     return(
         //SafeAreaView moet hier staan en niet in conditionele rendering anders werkt de rendering niet
@@ -53,7 +61,7 @@ const Search = ({navigation} : any) => {
             //Als er data is ####################################################
             <View style={[search.container]}> 
                 <View style={[search.containerTopIfData]}>
-                    <TouchableOpacity onPress={() => navigation.goBack()} style={{paddingBottom:16, marginVertical: 16, marginHorizontal:8, marginTop:20}}>
+                    <TouchableOpacity onPress={() => returnButton()} style={{paddingBottom:16, marginVertical: 16, marginHorizontal:8, marginTop:20}}>
                         <View style={{flex: 1, flexDirection: "row", alignItems: "center", marginBottom:16}}>
                             <View style={[button.buttonSvg, background.neutral[500]]}>
                                 <Svg style={[button.svg]} xmlns="http://www.w3.org/2000/svg" width="45" height="45" viewBox="0 0 20 22" fill="none" stroke="#e0d8d6" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><Path d="M9 18l6-6-6-6"/></Svg> 
