@@ -122,20 +122,26 @@ export const MovieCards = ({ idMovie, picture }: MovieArgs) => {
 type CastArgs = {
 	name: string;
 	picture: string;
+    actorId: any;
+   // navigation: any;
 }
 
-export const CastCards = ({ name, picture }: CastArgs) => {
+export const CastCards = ({ name, picture, actorId }: CastArgs) => {
     var full_cast_url = IMAGE_URL + picture;
+    const navigation = useNavigation();
+
     if (picture == "null") {
         full_cast_url = "https://safetyaustraliagroup.com.au/wp-content/uploads/2019/05/image-not-found.png";
     }
     return (
         <SafeAreaView>
-            <Image 
-                source={{uri: full_cast_url}} 
-                style={Cards.card} 
-            />
-            <Text style={[Cards.actorName, text.neutral[100]]}>{name}</Text>
+            <TouchableOpacity onPress={() => {navigation.navigate('ActorDetails', {actor : actorId})}}>
+                <Image 
+                    source={{uri: full_cast_url}} 
+                    style={Cards.card} 
+                />
+                <Text style={[Cards.actorName, text.neutral[100]]}>{name}</Text>
+            </TouchableOpacity>
         </SafeAreaView>
 
     )

@@ -73,14 +73,17 @@ const MovieDetails = ({navigation, route}) => {
         const allActors = [];
         if (props != undefined) {
             for (let i = 0; i < props[0].cast.length; i++){
+                
                 const image = props[0].cast[i]?.profile_path;
                 if (image == null) {
                     image = "null"; //Als de acteur geen foto geeft null meegeven zodat ik een no image found placeholder kan plaatsen
                 }
                 allActors.push(
                     <CastCards 
+                        //navigation={navigation}
                         picture={image}
                         name={props[0].cast[i]?.name}
+                        actorId={props[0].cast[i]?.id}
                     />
                 )
             }
