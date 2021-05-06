@@ -63,15 +63,15 @@ const ActorDetails = ({navigation, route}) => {
         const simMovies = [];
         if (props != undefined) {
             for (let i = 0; i < props.length; i++){
-                const image = props[0]?.poster_path;
+                const image = props[0].poster_path;
                 if (image == null) {
                     image = "null"; //Als de acteur geen foto geeft null meegeven zodat ik een no image found placeholder kan plaatsen
                 }
                 simMovies.push(
                     <MovieCards 
-                        key={i}
-                        idMovie={props[i]?.id}
-                        picture={props[i]?.poster_path}
+                        key={props[i].id}
+                        idMovie={props[i].id}
+                        picture={props[i].poster_path}
                     />
                 )
             }

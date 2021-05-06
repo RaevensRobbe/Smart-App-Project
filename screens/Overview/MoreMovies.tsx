@@ -24,7 +24,7 @@ import { Cards } from '../../styles/components/cards';
 const MoreMovies = ({route, navigation: {goBack} } : any) => {
 
     const navigation = useNavigation();
-
+    var keyCounter = 1;
     useEffect(() => {
         getMovies();
 	}, []);
@@ -61,15 +61,16 @@ const MoreMovies = ({route, navigation: {goBack} } : any) => {
 
     const renderMovies = (props : string[]) => {
         const popMovies = [];
-
-        
+        if (props[0] == undefined) return;        
         for (let i = 0; i < 10; i++){
             popMovies.push(
                 <MovieCards 
-                    idMovie={props[i]?.id} //id => wanneer geklikt op film dat je weet welke film
-                    picture={props[i]?.poster_path} // picture => afbeelding weergeven
+                    key={keyCounter}
+                    idMovie={props[i].id} //id => wanneer geklikt op film dat je weet welke film
+                    picture={props[i].poster_path} // picture => afbeelding weergeven
                 />
             )
+            keyCounter++;
         }
 
         return popMovies;

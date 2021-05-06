@@ -38,7 +38,7 @@ const MovieDetails = ({navigation, route}) => {
     const { movieId } = route.params;
 
     var favorite = false;
-
+    var keyCounter = 0;
     const [favoriteMovie, setFavoriteMovie] = useState();
 
     const [movieData, setMovieData] = useState<string[]>();
@@ -74,23 +74,26 @@ const MovieDetails = ({navigation, route}) => {
         if (props != undefined) {
             for (let i = 0; i < props[0].cast.length; i++){
                 
-                const image = props[0].cast[i]?.profile_path;
+                const image = props[0].cast[i].profile_path;
                 if (image == null) {
                     image = "null"; //Als de acteur geen foto geeft null meegeven zodat ik een no image found placeholder kan plaatsen
                 }
                 allActors.push(
                     <CastCards 
                         //navigation={navigation}
+                        key={keyCounter}
                         picture={image}
-                        name={props[0].cast[i]?.name}
-                        actorId={props[0].cast[i]?.id}
+                        name={props[0].cast[i].name}
+                        actorId={props[0].cast[i].id}
                     />
                 )
+                keyCounter++;
             }
             if (props.length == 0 ){
                 allActors.push(
-                    <Text style={[text.neutral[100]]}>No similar movies found 😢</Text>
+                    <Text style={[text.neutral[100]]} key={keyCounter}>No similar movies found 😢</Text>
                 )
+                keyCounter++;
             }
         }
 
@@ -101,21 +104,24 @@ const MovieDetails = ({navigation, route}) => {
         const simMovies = [];
         if (props != undefined) {
             for (let i = 0; i < props.length; i++){
-                const image = props[0]?.poster_path;
+                const image = props[0].poster_path;
                 if (image == null) {
                     image = "null"; //Als de acteur geen foto geeft null meegeven zodat ik een no image found placeholder kan plaatsen
                 }
                 simMovies.push(
                     <MovieCards 
-                        idMovie={props[i]?.id}
-                        picture={props[i]?.poster_path}
+                        key={keyCounter}
+                        idMovie={props[i].id}
+                        picture={props[i].poster_path}
                     />
                 )
+                keyCounter++;
             }
             if (props.length == 0 ){
                 simMovies.push(
-                    <Text style={[text.neutral[100]]}>No similar movies found 😢</Text>
+                    <Text style={[text.neutral[100]]} key={keyCounter}>No similar movies found 😢</Text>
                 )
+                keyCounter++;
             }
         }
 
@@ -127,18 +133,19 @@ const MovieDetails = ({navigation, route}) => {
         var teller = 0;
         if (props != undefined) {
             for (let i = 0; i < props.length; i++){
-                if(props[i]?.site == "YouTube" && props[i]?.type == "Trailer" && teller==0){
+                if(props[i].site == "YouTube" && props[i].type == "Trailer" && teller==0){
                     movieTrailer.push(
                         <View style={{marginBottom:16}}>
-                            <Text style={[detailPage.trailerTekst, text.neutral[100]]}>{props[i]?.name}</Text>
+                            <Text style={[detailPage.trailerTekst, text.neutral[100]]}>{props[i].name}</Text>
                             <WebView
                                 style={[detailPage.trailer]}
                                 javaScriptEnabled={true}
                                 domStorageEnabled={true}
-                                source={{uri: 'https://www.youtube.com/embed/'+ props[i]?.key}}
+                                source={{uri: 'https://www.youtube.com/embed/'+ props[i].key}}
                             /> 
                         </View>
                     )
+                    //keyCounter++;
                     teller+=1;
                 }
 
@@ -157,9 +164,9 @@ const MovieDetails = ({navigation, route}) => {
             //! default os calendar altijd id: 1 => en moet een string zijn
             const newEvent = await Calendar.createEventAsync("1", 
                 {
-                    title: movieData[0]?.title,
-                    startDate: new Date(movieData[0]?.release_date),
-                    endDate: new Date(movieData[0]?.release_date),
+                    title: movieData[0].title,
+                    startDate: new Date(movieData[0].release_date),
+                    endDate: new Date(movieData[0].release_date),
                     allDay : true,
                     timeZone: "Europe/Brussels",
                 }
@@ -168,7 +175,7 @@ const MovieDetails = ({navigation, route}) => {
             await Notifications.scheduleNotificationAsync({
                 content: {
                   title: "Added successfully 🍿",
-                  body: movieData[0]?.title + " has been added to your calendar",
+                  body: movieData[0].title + " has been added to your calendar",
                 },
                 trigger: { seconds: 1 },
               });
@@ -178,7 +185,7 @@ const MovieDetails = ({navigation, route}) => {
     const addToFavorites = async() =>{
         const movie : FavoriteMovie = {
             idMovie : movieId,
-            picture : movieData[0]?.poster_path
+            picture : movieData[0].poster_path
         }
 
         console.log(movie);
@@ -188,7 +195,7 @@ const MovieDetails = ({navigation, route}) => {
             await Notifications.scheduleNotificationAsync({
                 content: {
                   title: "Added to favorites ♥",
-                  body: movieData[0]?.title + " has been added to your favorites",
+                  body: movieData[0].title + " has been added to your favorites",
                 },
                 trigger: { seconds: 1 },
             });
@@ -199,14 +206,14 @@ const MovieDetails = ({navigation, route}) => {
     const removeFromFavorites = async() =>{
         const movie : FavoriteMovie = {
             idMovie : movieId,
-            picture : movieData[0]?.backdrop_path
+            picture : movieData[0].backdrop_path
         }
         const deletefav = await moviesdb.delete(movieId);
         if (deletefav.rowsAffected > 0) {
             await Notifications.scheduleNotificationAsync({
                 content: {
                   title: "Removed from favorites 💔",
-                  body: movieData[0]?.title + " has been removed from your favorites",
+                  body: movieData[0].title + " has been removed from your favorites",
                 },
                 trigger: { seconds: 1 },
             });
@@ -231,33 +238,33 @@ const MovieDetails = ({navigation, route}) => {
             const productionCompanies = [];
             const languages = [];
 
-            const year = movieData[0]?.release_date.substring(0,4);
+            const year = movieData[0].release_date.substring(0,4);
 
-            for (let i = 0; i < movieData[0]?.genres.length; i++) {
-                genres.push(movieData[0]?.genres[i].name);
+            for (let i = 0; i < movieData[0].genres.length; i++) {
+                genres.push(movieData[0].genres[i].name);
             }
             if(genres.length == 0){
                 genres.push("unknown")
             } 
             // console.log(genres);
 
-            for (let i = 0; i < movieData[0]?.production_companies.length; i++) {
-                productionCompanies.push(movieData[0]?.production_companies[i].name);
+            for (let i = 0; i < movieData[0].production_companies.length; i++) {
+                productionCompanies.push(movieData[0].production_companies[i].name);
             }
             if(productionCompanies.length == 0){
                 productionCompanies.push("unknown")
             }
 
-            for (let i = 0; i < movieData[0]?.spoken_languages.length; i++){
-                languages.push(movieData[0]?.spoken_languages[i].english_name);
+            for (let i = 0; i < movieData[0].spoken_languages.length; i++){
+                languages.push(movieData[0].spoken_languages[i].english_name);
             }
             if(languages.length == 0){
                 languages.push("unknown")
             }
-            var full_url = IMAGE_URL + movieData[0]?.backdrop_path;
+            var full_url = IMAGE_URL + movieData[0].backdrop_path;
             // console.log(full_url);
             movieInfo.push(
-                <View style={[detailPage.container]}>
+                <View style={[detailPage.container]} key={keyCounter}>
                     <ImageBackground source={{uri: full_url}} style={[detailPage.image]}> 
                     <View style={{marginLeft:8}}>
                         <CustomCircleButton />
@@ -268,7 +275,7 @@ const MovieDetails = ({navigation, route}) => {
                     </View>
                     <View style={[detailPage.mainContainer]}>
                         <View style={[detailPage.titelContainer]}>
-                            <Text style={[detailPage.titel, text.neutral[100]]}>{movieData[0]?.title}</Text>
+                            <Text style={[detailPage.titel, text.neutral[100]]}>{movieData[0].title}</Text>
                             <View>
                             <View style={[detailPage.genreContainer]}>
                                 {genres.map((genre:string) =>
@@ -276,15 +283,15 @@ const MovieDetails = ({navigation, route}) => {
                                 )}
                             </View>
                             </View>
-                            <Text style={[detailPage.duration, text.neutral[200]]}>{movieData[0]?.runtime} min</Text>
+                            <Text style={[detailPage.duration, text.neutral[200]]}>{movieData[0].runtime} min</Text>
                             
                         </View>
                         
                         <View style={[detailPage.actionContainer]}>
                             <View style={[detailPage.actionGroup]}>
-                                <Text style={[detailPage.actionGroupTekst, text.neutral[200]]}>{movieData[0]?.vote_count} votes</Text>
+                                <Text style={[detailPage.actionGroupTekst, text.neutral[200]]}>{movieData[0].vote_count} votes</Text>
                                 <View style={[detailPage.voteCirkel, background.neutral[500]]}>
-                                    <Text style={[detailPage.voteText, text.neutral[100]]}>{movieData[0]?.vote_average}</Text>
+                                    <Text style={[detailPage.voteText, text.neutral[100]]}>{movieData[0].vote_average}</Text>
                                 </View>
                             </View>
 
@@ -305,8 +312,8 @@ const MovieDetails = ({navigation, route}) => {
                     </View>
                     {/* Description part hierin komt tagline + beschrijving */}
                     <View style={[detailPage.descriptionContainer]}>
-                        <Text style={[detailPage.tagLine, text.neutral[100]]}>{movieData[0]?.tagline}</Text>
-                        <Text style={[detailPage.description, text.neutral[100]]}>{movieData[0]?.overview}</Text>
+                        <Text style={[detailPage.tagLine, text.neutral[100]]}>{movieData[0].tagline}</Text>
+                        <Text style={[detailPage.description, text.neutral[100]]}>{movieData[0].overview}</Text>
                     </View>
     
                     {showTrailer(trailer)}
@@ -327,7 +334,7 @@ const MovieDetails = ({navigation, route}) => {
                             <View style={[detailPage.infoItems]}>
                                 <Text style={[text.neutral[100]]}>Premiere: </Text>
                                 <View style={[detailPage.premiereContainer]}>
-                                    <Text style={[detailPage.productionCompany, text.neutral[200]]}>{movieData[0]?.release_date}</Text>
+                                    <Text style={[detailPage.productionCompany, text.neutral[200]]}>{movieData[0].release_date}</Text>
                                 </View>         
                             </View>
 
@@ -346,6 +353,7 @@ const MovieDetails = ({navigation, route}) => {
                 </View>
             )
         }
+        keyCounter++;
         return movieInfo;
     }
 
