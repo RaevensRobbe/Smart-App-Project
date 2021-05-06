@@ -4,7 +4,7 @@ import {SafeAreaView, Text, TouchableOpacity, View, Image, Button} from 'react-n
 import { useNavigation } from '@react-navigation/native';
 import { BlurView } from 'expo-blur';
 import { ScrollView } from 'react-native-gesture-handler';
-
+import {useScreens} from 'react-native-screens';
 import Modal from 'react-native-modal';
 import Svg, { Path } from 'react-native-svg';
 
@@ -57,12 +57,12 @@ export const MovieCards = ({ idMovie, picture }: MovieArgs) => {
         // console.log("render");
         // console.log(movieData);
         const genres = [];
-        setMovieBackrop(IMAGE_URL + movieData[0]?.backdrop_path);
-        setMovieName(movieData[0]?.title);
-        setMovieDescription(movieData[0]?.overview);
-        setMovieVote(movieData[0]?.vote_average);
-        for (let i = 0; i < movieData[0]?.genres.length; i++) {
-            genres.push(movieData[0]?.genres[i].name + "    ");
+        setMovieBackrop(IMAGE_URL + movieData[0].backdrop_path);
+        setMovieName(movieData[0].title);
+        setMovieDescription(movieData[0].overview);
+        setMovieVote(movieData[0].vote_average);
+        for (let i = 0; i < movieData[0].genres.length; i++) {
+            genres.push(movieData[0].genres[i].name + "    ");
         }
         setMovieGenres(genres);
 
@@ -103,7 +103,7 @@ export const MovieCards = ({ idMovie, picture }: MovieArgs) => {
                                 <TouchableOpacity style={[PopUp.touchable]} onPress={() => {setModalVisible(!isModalVisible), navigation.navigate("MovieDetails", {movieId:idMovie})}}>
                                     <View  style={[ PopUp.button_container, background.neutral[500]]}>
                                         <Text style={[ button.buttonText, text.neutral[100]]}>See more</Text>
-                                        <Svg xmlns="http://www.w3.org/2000/svg" width="50" height="29" viewBox="0 0 24 24" fill="none" stroke="#e0d8d6" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><Path d="M9 18l6-6-6-6"/></Svg>  
+                                        <Svg xmlns="http://www.w3.org/2000/svg" width="50" height="29" viewBox="0 0 30 24" fill="none" stroke="#e0d8d6" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><Path d="M9 18l6-6-6-6"/></Svg>  
                                     </View>                              
                                 </TouchableOpacity>
 
@@ -111,10 +111,7 @@ export const MovieCards = ({ idMovie, picture }: MovieArgs) => {
                         </View> 
                     </TouchableOpacity>
                 </Modal>
-            </BlurView> 
-            
-                
-            
+            </BlurView>     
         </SafeAreaView>
     )
 }
@@ -122,20 +119,26 @@ export const MovieCards = ({ idMovie, picture }: MovieArgs) => {
 type CastArgs = {
 	name: string;
 	picture: string;
+    actorId: any;
+   // navigation: any;
 }
 
-export const CastCards = ({ name, picture }: CastArgs) => {
+export const CastCards = ({ name, picture, actorId }: CastArgs) => {
     var full_cast_url = IMAGE_URL + picture;
+    const navigation = useNavigation();
+
     if (picture == "null") {
         full_cast_url = "https://safetyaustraliagroup.com.au/wp-content/uploads/2019/05/image-not-found.png";
     }
     return (
         <SafeAreaView>
-            <Image 
-                source={{uri: full_cast_url}} 
-                style={Cards.card} 
-            />
-            <Text style={[Cards.actorName, text.neutral[100]]}>{name}</Text>
+            <TouchableOpacity onPress={() => {navigation.navigate('ActorDetails', {actor : actorId})}}>
+                <Image 
+                    source={{uri: full_cast_url}} 
+                    style={Cards.card} 
+                />
+                <Text style={[Cards.actorName, text.neutral[100]]}>{name}</Text>
+            </TouchableOpacity>
         </SafeAreaView>
 
     )

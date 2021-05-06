@@ -19,6 +19,8 @@ const Search = ({navigation} : any) => {
     const [movieInput, setMovieInput] = useState('');
     const [searchedMovie, setSearchedMovie] = useState([]);
 
+    var keyCounter = 1;
+
     const getMovies = async () => {
         const movieData = await getSearchMovies(movieInput);
         setSearchedMovie([]);
@@ -33,10 +35,12 @@ const Search = ({navigation} : any) => {
             for (let i = 0; i < props.length; i++){
                 foundMovies.push(
                     <MovieCards 
-                        idMovie={props[i]?.id} //id => wanneer geklikt op film dat je weet welke film
-                        picture={props[i]?.poster_path} // picture => afbeelding weergeven
+                        key={keyCounter}
+                        idMovie={props[i].id} //id => wanneer geklikt op film dat je weet welke film
+                        picture={props[i].poster_path} // picture => afbeelding weergeven
                     />
                 )
+                keyCounter++;
             }
         }
 

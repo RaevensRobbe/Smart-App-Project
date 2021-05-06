@@ -3,6 +3,7 @@ import { Dimensions, StyleSheet } from 'react-native';
 export const Cards = StyleSheet.create({
     holder:{
         marginHorizontal: 16,
+        marginRight: 8,
         marginBottom:32,
         flexDirection: 'row',
         flexWrap:'wrap',

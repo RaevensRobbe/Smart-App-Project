@@ -23,6 +23,8 @@ const Overview = ({navigation} : any) => {
     const [topRatedMovies, setTopRatedMovies] = useState([]);
     const [upcomingMovies, setUpcomingMovies] = useState([]);
 
+    var keyCounter = 1;
+
     const getMovies = async () => {
         const popMovies = await getPopularMovies();
         setPopularMovies(popMovies);
@@ -38,16 +40,17 @@ const Overview = ({navigation} : any) => {
 
     const renderMovies = (props : string[]) => {
         const popMovies = [];
-        if (!props) return;
+        if (props[0] == undefined) return; //zodat ik niet 2x op een card moet klikken (soms kan de prop leeg zijn door te traag laden)
         for (let i = 0; i < 10; i++){
             //console.log(props[i]);
             popMovies.push(
                 <MovieCards 
-                    key={props[i]?.id}
-                    idMovie={props[i]?.id} //id => wanneer geklikt op film dat je weet welke film
-                    picture={props[i]?.poster_path} // picture => afbeelding weergeven
+                    key={keyCounter}
+                    idMovie={props[i].id} //id => wanneer geklikt op film dat je weet welke film
+                    picture={props[i].poster_path} // picture => afbeelding weergeven
                 />
             )
+            keyCounter++;
         }
 
         return popMovies;

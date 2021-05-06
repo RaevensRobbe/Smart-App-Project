@@ -4,6 +4,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { ActivityIndicator } from 'react-native';
+import { enableScreens } from 'react-native-screens';
 // @ts-ignore
 import Ionicons from '@expo/vector-icons/Ionicons';
 
@@ -22,7 +23,7 @@ import { neutral, background } from './styles/colors/theme'
 const Tab = createBottomTabNavigator();
 
 export default function App() {
-
+  enableScreens();
   const [loaded, error] = useFonts({
     MontserratBold: require('./assets/fonts/Montserrat-Bold.ttf'),
     Montserrat: require('./assets/fonts/Montserrat-Regular.ttf'),

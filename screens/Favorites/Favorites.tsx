@@ -35,6 +35,7 @@ const Favorite = ({navigation} : any) => {
             console.log(props[i].idMovie);
             foundMovies.push(
                 <MovieCards 
+                    key={i}
                     idMovie={props[i].idMovie} //id => wanneer geklikt op film dat je weet welke film
                     picture={props[i].picture} // picture => afbeelding weergeven
                 />
